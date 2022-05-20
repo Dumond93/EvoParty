@@ -1,10 +1,12 @@
 package net.ddns.evolutionary.evoparty.events;
 
 import me.blackvein.quests.Quests;
-import net.ddns.evolutionary.EvoParty;
-import net.ddns.evolutionary.utility.PartyUtils;
+
+import net.ddns.evolutionary.evoparty.EvoParty;
+import net.ddns.evolutionary.evoparty.utility.PartyUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,10 +14,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerExpChangeEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.Plugin;
@@ -28,6 +27,7 @@ public class Events implements Listener {
     Plugin evoParty = EvoParty.getInstance();
     PartyUtils partyUtils = new PartyUtils();
     Quests qp = (Quests) Bukkit.getServer().getPluginManager().getPlugin("Quests");
+
 
 
     @EventHandler
@@ -124,6 +124,37 @@ public class Events implements Listener {
                     partyUtils.partyBoardUpdate(player);
                 }
             }.runTaskLater(evoParty, 20);
+        }
+    }
+
+    @EventHandler
+    public void PlayerChangeWorldEvent (PlayerChangedWorldEvent event){
+        Player player = event.getPlayer();
+        String world = player.getWorld().toString();
+        if (partyUtils.isPartyLeader(player)){
+            List<Player> party = partyUtils.getParty(player);
+            for (Player p : party){
+                if (partyUtils.isPartyMember(player)){
+                    p.sendMessage(ChatColor.GOLD + "The party leader has changed worlds to " + world);
+                    p.sendMessage(ChatColor.AQUA + "Type follow to follow the leader");
+                    partyUtils.leaderChangedWorld(p);
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void asyncChatEvent(AsyncPlayerChatEvent event) {
+        Player player = event.getPlayer();
+        String message = event.getMessage();
+        if (message.equalsIgnoreCase("follow")) {
+            PersistentDataContainer pContainer = player.getPersistentDataContainer();
+            NamespacedKey leaderChangedWorld = new NamespacedKey(evoParty, "worldChange");
+            if (pContainer.has(leaderChangedWorld, PersistentDataType.INTEGER)) {
+                Player partyLeader = partyUtils.getPartyLeader(partyUtils.getParty(player));
+                Location teleportLocation = partyLeader.getLocation();
+                player.teleport(teleportLocation);
+            }
         }
     }
     /* These are quest related events to be implemented in the future for quest integration

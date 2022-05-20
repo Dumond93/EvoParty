@@ -24,12 +24,14 @@ public class PartyUtils {
 
   Plugin evoParty = EvoParty.getInstance();
 
+  // This section defines name spaced keys used throughout the utility class
     NamespacedKey activePartyKey = new NamespacedKey(evoParty, "ActivePartyKey");
     NamespacedKey partyMemberKey = new NamespacedKey(evoParty, "PartyMemberKey");
     NamespacedKey partyLeaderKey = new NamespacedKey(evoParty, "PartyLeaderKey");
     NamespacedKey partyChat = new NamespacedKey(evoParty, "PartyChat");
     NamespacedKey invitation = new NamespacedKey(evoParty, "Invitation");
     NamespacedKey scoreboard = new NamespacedKey(evoParty, "Scoreboard");
+    NamespacedKey leaderChangedWorld = new NamespacedKey(evoParty, "worldChange");
 
     Quests qp = (Quests) Bukkit.getServer().getPluginManager().getPlugin("Quests");
 
@@ -466,6 +468,18 @@ public class PartyUtils {
                 inviter.sendMessage(ChatColor.GOLD + invitee.getName() + ChatColor.RED + " has denied your invitation");
             }
         }
+    }
+
+    public void leaderChangedWorld(Player player){
+        PersistentDataContainer pContainer = player.getPersistentDataContainer();
+        pContainer.set(leaderChangedWorld, PersistentDataType.INTEGER, 1);
+        new BukkitRunnable(){
+
+            @Override
+            public void run() {
+                pContainer.remove(leaderChangedWorld);
+            }
+        }.runTaskLater(evoParty, 200);
     }
 
 ////////////////////// This Section Defines Events for Use By Other Plugins /////////////////////////////////////////////////
