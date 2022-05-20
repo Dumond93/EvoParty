@@ -1,0 +1,33 @@
+name: EvoParty
+main: net.ddns.evolutionary.evoparty.EvoParty
+version: 1.3
+author: Dumond98
+api-version: 1.17
+commands:
+  party:
+    description: Command Used To Manage Parties. Requires one of the below options.
+    usage: /party [start] [leave] [invite] [accept] [deny] [tp] [tpall]
+  party start:
+    description: Starts A New Party
+    usage: /party start
+  party leave:
+    description: Leave Your Current Party
+    usage: /party leave
+  party hud:
+    description: Toggle The Party Member Hud
+  party invite:
+    description: Invite A New Player To Your Party
+    usage: /party invite [playername]
+  party accept:
+    description: Accept A Party Invite
+    usage: /party accept
+  party deny:
+    description: Deny A Party Invite
+    usage: /party deny
+  party tp:
+    description: Teleport To A Party Member
+    usage: /party tp [playername]
+  party tpall:
+    description: Teleports The Entire Party
+    usage: /party tpall
+
