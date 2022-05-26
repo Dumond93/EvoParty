@@ -33,7 +33,7 @@ public class PartyUtils {
     NamespacedKey scoreboard = new NamespacedKey(evoParty, "Scoreboard");
     NamespacedKey leaderChangedWorld = new NamespacedKey(evoParty, "worldChange");
 
-    Quests qp = (Quests) Bukkit.getServer().getPluginManager().getPlugin("Quests");
+    //Quests qp = (Quests) Bukkit.getServer().getPluginManager().getPlugin("Quests");
 
     public boolean isPlayerInParty(Player player) {
         PersistentDataContainer playerContainer = player.getPersistentDataContainer();
@@ -474,10 +474,10 @@ public class PartyUtils {
         PersistentDataContainer pContainer = player.getPersistentDataContainer();
         pContainer.set(leaderChangedWorld, PersistentDataType.INTEGER, 1);
         new BukkitRunnable(){
-
             @Override
             public void run() {
                 pContainer.remove(leaderChangedWorld);
+                player.sendMessage(ChatColor.RED + "You have chosen not to follow");
             }
         }.runTaskLater(evoParty, 200);
     }

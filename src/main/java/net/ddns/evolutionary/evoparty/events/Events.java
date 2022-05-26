@@ -26,9 +26,7 @@ public class Events implements Listener {
 
     Plugin evoParty = EvoParty.getInstance();
     PartyUtils partyUtils = new PartyUtils();
-    Quests qp = (Quests) Bukkit.getServer().getPluginManager().getPlugin("Quests");
-
-
+    //Quests qp = (Quests) Bukkit.getServer().getPluginManager().getPlugin("quests");
 
     @EventHandler
     public void onPlayerChats(AsyncPlayerChatEvent event){
@@ -129,6 +127,7 @@ public class Events implements Listener {
 
     @EventHandler
     public void PlayerChangeWorldEvent (PlayerChangedWorldEvent event){
+        Bukkit.getServer().getConsoleSender().sendMessage("Change world event fired");
         Player player = event.getPlayer();
         String world = player.getWorld().toString();
         if (partyUtils.isPartyLeader(player)){
@@ -145,12 +144,15 @@ public class Events implements Listener {
 
     @EventHandler
     public void asyncChatEvent(AsyncPlayerChatEvent event) {
+        Bukkit.getServer().getConsoleSender().sendMessage("Player chat event fired");
         Player player = event.getPlayer();
         String message = event.getMessage();
         if (message.equalsIgnoreCase("follow")) {
+            player.sendMessage("Correct message");
             PersistentDataContainer pContainer = player.getPersistentDataContainer();
             NamespacedKey leaderChangedWorld = new NamespacedKey(evoParty, "worldChange");
             if (pContainer.has(leaderChangedWorld, PersistentDataType.INTEGER)) {
+                player.sendMessage("player data container found");
                 Player partyLeader = partyUtils.getPartyLeader(partyUtils.getParty(player));
                 Location teleportLocation = partyLeader.getLocation();
                 player.teleport(teleportLocation);
