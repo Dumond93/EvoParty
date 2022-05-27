@@ -30,7 +30,6 @@ public class PartyUtils {
     NamespacedKey partyLeaderKey = new NamespacedKey(evoParty, "PartyLeaderKey");
     NamespacedKey partyChat = new NamespacedKey(evoParty, "PartyChat");
     NamespacedKey lfgChat = new NamespacedKey(evoParty, "lfgChat");
-    NamespacedKey recentChat = new NamespacedKey(evoParty, "recentChat");
     NamespacedKey invitation = new NamespacedKey(evoParty, "Invitation");
     NamespacedKey scoreboard = new NamespacedKey(evoParty, "Scoreboard");
     NamespacedKey leaderChangedWorld = new NamespacedKey(evoParty, "worldChange");
@@ -366,7 +365,6 @@ public class PartyUtils {
         playerContainer.remove(partyChat);
         playerContainer.remove(invitation);
         playerContainer.remove(scoreboard);
-        playerContainer.remove(recentChat);
     }
 
     public void partyBoard(List<Player> playerList) {
