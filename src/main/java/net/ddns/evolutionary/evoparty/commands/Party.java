@@ -45,6 +45,9 @@ public class Party implements CommandExecutor {
                     case "chat":
                         partyUtils.togglePartyChat(player);
                         break;
+                    case "lfg":
+                        partyUtils.toggleLFGChat(player);
+                        break;
                     case "hud":
                         partyUtils.partyBoardToggle(player);
                         break;
@@ -52,7 +55,7 @@ public class Party implements CommandExecutor {
                         partyUtils.massPartyTeleport(player);
                         break;
                     default:
-                        player.sendMessage(ChatColor.RED + "Valid options are [start] [leave] [invite] [hud] [accept] [deny] [teleport]");
+                        player.sendMessage(ChatColor.RED + "Valid options are [start] [leave] [invite] [hud] [chat] [lfg] [accept] [deny] [teleport]");
                 }
             }
             if (args.length == 2) {

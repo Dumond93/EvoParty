@@ -29,6 +29,8 @@ public class PartyUtils {
     NamespacedKey partyMemberKey = new NamespacedKey(evoParty, "PartyMemberKey");
     NamespacedKey partyLeaderKey = new NamespacedKey(evoParty, "PartyLeaderKey");
     NamespacedKey partyChat = new NamespacedKey(evoParty, "PartyChat");
+    NamespacedKey lfgChat = new NamespacedKey(evoParty, "lfgChat");
+    NamespacedKey recentChat = new NamespacedKey(evoParty, "recentChat");
     NamespacedKey invitation = new NamespacedKey(evoParty, "Invitation");
     NamespacedKey scoreboard = new NamespacedKey(evoParty, "Scoreboard");
     NamespacedKey leaderChangedWorld = new NamespacedKey(evoParty, "worldChange");
@@ -332,9 +334,26 @@ public class PartyUtils {
                     player.sendMessage(ChatColor.DARK_AQUA + "Disabled Party Chat");
                 } else {
                     playerContainer.set(partyChat, PersistentDataType.INTEGER, 1);
+                    playerContainer.remove(lfgChat);
                     player.sendMessage(ChatColor.AQUA + "Enabled Party Chat");
                 }
             } else {player.sendMessage(ChatColor.RED + "You do not have permission to use this command");}
+        } else {player.sendMessage(ChatColor.RED + "You are not in a party");}
+    }
+
+    public void toggleLFGChat(Player player) {
+        if (checkPermissions(player, "evoparty.lfgchat")) {
+            PersistentDataContainer playerContainer = player.getPersistentDataContainer();
+            if (playerContainer.has(lfgChat, PersistentDataType.INTEGER)) {
+                playerContainer.remove(lfgChat);
+                player.sendMessage(ChatColor.DARK_PURPLE + "Disabled LFG Chat");
+            } else {
+                playerContainer.set(lfgChat, PersistentDataType.INTEGER, 1);
+                playerContainer.remove(partyChat);
+                player.sendMessage(ChatColor.DARK_PURPLE + "Enabled LFG Chat");
+            }
+        } else {
+            player.sendMessage(ChatColor.RED + "You do not have permission to use this command");
         }
     }
 
@@ -343,9 +362,11 @@ public class PartyUtils {
         playerContainer.remove(activePartyKey);
         playerContainer.remove(partyLeaderKey);
         playerContainer.remove(partyMemberKey);
+        playerContainer.remove(lfgChat);
         playerContainer.remove(partyChat);
         playerContainer.remove(invitation);
         playerContainer.remove(scoreboard);
+        playerContainer.remove(recentChat);
     }
 
     public void partyBoard(List<Player> playerList) {

@@ -6,7 +6,7 @@ api-version: 1.17
 commands:
   party:
     description: Command Used To Manage Parties. Requires one of the below options.
-    usage: /party [start] [leave] [invite] [accept] [deny] [tp] [tpall]
+    usage: /party [start] [leave] [invite] [accept] [deny] [hud] [chat] [lfg] [tp] [tpall]
   party start:
     description: Starts A New Party
     usage: /party start
@@ -15,6 +15,13 @@ commands:
     usage: /party leave
   party hud:
     description: Toggle The Party Member Hud
+    usage: /party hud
+  party chat:
+    description: Enables party chat
+    usage: /party chat
+  party lfg:
+    description: Enables Looking For Group Chat
+    usage: /party lfg
   party invite:
     description: Invite A New Player To Your Party
     usage: /party invite [playername]

@@ -29,17 +29,23 @@ public class Events implements Listener {
     //Quests qp = (Quests) Bukkit.getServer().getPluginManager().getPlugin("quests");
 
     @EventHandler
-    public void onPlayerChats(AsyncPlayerChatEvent event){
+    public void onPlayerChats(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
         String message = event.getMessage();
         PersistentDataContainer playerContainer = player.getPersistentDataContainer();
         NamespacedKey partyChat = new NamespacedKey(evoParty, "PartyChat");
-        if (playerContainer.has(partyChat, PersistentDataType.INTEGER)){
-            for (Player p : partyUtils.getParty(player)){
-                p.sendMessage(ChatColor.AQUA + "(PartyChat) [" + player.getName() + "] - " + message );
-                Bukkit.getServer().getConsoleSender().sendMessage("(PartyChat) [" + player.getName() + "] - " + message );
+        NamespacedKey lfgChat = new NamespacedKey(evoParty, "lfgChat");
+        NamespacedKey recentChat = new NamespacedKey(evoParty, "recentChat");
+        if (playerContainer.has(partyChat, PersistentDataType.INTEGER)) {
+            for (Player p : partyUtils.getParty(player)) {
+                p.sendMessage(ChatColor.AQUA + "[PartyChat] <" + player.getName() + "> " + message);
+                Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.AQUA + "[PartyChat] <" + player.getName() + "> " + message);
             }
             event.setCancelled(true);
+        }
+        else if (playerContainer.has(lfgChat, PersistentDataType.INTEGER)) {
+            String newmessage = ChatColor.DARK_PURPLE + "[Looking For Group] -" + message;
+            event.setMessage(newmessage);
         }
     }
 
@@ -51,11 +57,12 @@ public class Events implements Listener {
 
         if (playerContainer.has(activePartyKey, PersistentDataType.STRING)) {
             partyUtils.leaveParty(player);
+            partyUtils.removePersistentData(player);
         }
     }
 
     @EventHandler
-    public void playerDamageEvent(EntityDamageEvent event){
+    public void playerDamageEvent(EntityDamageEvent event) {
 
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
@@ -69,10 +76,10 @@ public class Events implements Listener {
     }
 
     @EventHandler
-    public void playerDeathEvent (PlayerDeathEvent event) {
+    public void playerDeathEvent(PlayerDeathEvent event) {
 
         Player player = event.getEntity();
-        if (partyUtils.isPlayerInParty(player)){
+        if (partyUtils.isPlayerInParty(player)) {
             List<Player> party = partyUtils.getParty(player);
             partyUtils.partyBoardUpdate(player);
             for (Player p : party) {
@@ -82,13 +89,13 @@ public class Events implements Listener {
     }
 
     @EventHandler
-    public void playerGainsExp(PlayerExpChangeEvent event){
+    public void playerGainsExp(PlayerExpChangeEvent event) {
         Player player = event.getPlayer();
         int expAmount = event.getAmount();
 
         if (partyUtils.isPlayerInParty(player)) {
             if (expAmount > 0) {
-                for (Player p : partyUtils.getParty(player)){
+                for (Player p : partyUtils.getParty(player)) {
                     if (p != player) {
                         p.giveExp(expAmount);
                         p.sendMessage(ChatColor.AQUA + "Gained party experience" + ChatColor.GOLD + " + " + event.getAmount());
@@ -113,9 +120,9 @@ public class Events implements Listener {
     }
 
     @EventHandler
-    public void playerRespawnEvent (PlayerRespawnEvent event) {
+    public void playerRespawnEvent(PlayerRespawnEvent event) {
         Player player = event.getPlayer();
-        if (partyUtils.isPlayerInParty(player)){
+        if (partyUtils.isPlayerInParty(player)) {
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -126,14 +133,14 @@ public class Events implements Listener {
     }
 
     @EventHandler
-    public void PlayerChangeWorldEvent (PlayerChangedWorldEvent event){
+    public void PlayerChangeWorldEvent(PlayerChangedWorldEvent event) {
         Bukkit.getServer().getConsoleSender().sendMessage("Change world event fired");
         Player player = event.getPlayer();
         String world = player.getWorld().toString();
-        if (partyUtils.isPartyLeader(player)){
+        if (partyUtils.isPartyLeader(player)) {
             List<Player> party = partyUtils.getParty(player);
-            for (Player p : party){
-                if (partyUtils.isPartyMember(player)){
+            for (Player p : party) {
+                if (partyUtils.isPartyMember(player)) {
                     p.sendMessage(ChatColor.GOLD + "The party leader has changed worlds to " + world);
                     p.sendMessage(ChatColor.AQUA + "Type follow to follow the leader");
                     partyUtils.leaderChangedWorld(p);
@@ -141,24 +148,7 @@ public class Events implements Listener {
             }
         }
     }
-
-    @EventHandler
-    public void asyncChatEvent(AsyncPlayerChatEvent event) {
-        Bukkit.getServer().getConsoleSender().sendMessage("Player chat event fired");
-        Player player = event.getPlayer();
-        String message = event.getMessage();
-        if (message.equalsIgnoreCase("follow")) {
-            player.sendMessage("Correct message");
-            PersistentDataContainer pContainer = player.getPersistentDataContainer();
-            NamespacedKey leaderChangedWorld = new NamespacedKey(evoParty, "worldChange");
-            if (pContainer.has(leaderChangedWorld, PersistentDataType.INTEGER)) {
-                player.sendMessage("player data container found");
-                Player partyLeader = partyUtils.getPartyLeader(partyUtils.getParty(player));
-                Location teleportLocation = partyLeader.getLocation();
-                player.teleport(teleportLocation);
-            }
-        }
-    }
+}
     /* These are quest related events to be implemented in the future for quest integration
 
     @EventHandler
@@ -231,4 +221,3 @@ public class Events implements Listener {
             }
         }
     } */
-}

@@ -16,6 +16,7 @@ PermissionBasedParties: false
 # evoparty.teleportall = allows a payer to teleport the entire party to them
 # evoparty.hud = allows a player to toggle their HUD
 # evoparty.partychat = allows a player to use party chat
+# evoparty.lfgchat = allows a player to use looking for group chat
 
 AllowHudToggle: true
 # Allow players to individually toggle their HUD.
