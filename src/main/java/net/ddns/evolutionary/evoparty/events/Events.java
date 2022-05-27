@@ -44,7 +44,7 @@ public class Events implements Listener {
             event.setCancelled(true);
         }
         else if (playerContainer.has(lfgChat, PersistentDataType.INTEGER)) {
-            String newmessage = ChatColor.DARK_PURPLE + "[Looking For Group] -" + message;
+            String newmessage = ChatColor.DARK_PURPLE + "[Looking For Group] - " + message;
             event.setMessage(newmessage);
         }
     }

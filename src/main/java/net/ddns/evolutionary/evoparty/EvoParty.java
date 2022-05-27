@@ -39,14 +39,14 @@ public class EvoParty extends JavaPlugin {
             }
         });
         Metrics metrics = new Metrics(this, pluginId);
-        getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "EvoParty Plugin Enabled!");
+        getServer().getConsoleSender().sendMessage("[EvoParty] Enabled EvoParty by Dumond98");
         getServer().getPluginManager().registerEvents(new Events(), this);
         getCommand("party").setExecutor(new Party());
     }
 
     @Override
     public void onDisable() {
-        Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "EvoParty Plugin Disabled!");
+        Bukkit.getServer().getConsoleSender().sendMessage("[EvoParty] Disabled EvoParty by Dumond98");
         for (Player p : Bukkit.getOnlinePlayers()) {
             PartyUtils partyUtils = new PartyUtils();
             partyUtils.removePersistentData(p);

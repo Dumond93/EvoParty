@@ -1,11 +1,11 @@
 name: EvoParty
 main: net.ddns.evolutionary.evoparty.EvoParty
-version: 1.3
+version: 1.4
 author: Dumond98
 api-version: 1.17
 commands:
   party:
-    description: Command Used To Manage Parties. Requires one of the below options.
+    description: Command Used To Manage Parties.o/
     usage: /party [start] [leave] [invite] [accept] [deny] [hud] [chat] [lfg] [tp] [tpall]
   party start:
     description: Starts A New Party

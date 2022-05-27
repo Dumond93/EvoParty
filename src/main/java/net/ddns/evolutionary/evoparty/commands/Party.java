@@ -26,6 +26,9 @@ public class Party implements CommandExecutor {
         PartyUtils partyUtils = new PartyUtils();
 
         if (command.getName().equalsIgnoreCase("party")) {
+            if (args.length == 0){
+                player.sendMessage(ChatColor.YELLOW + "Valid options are [start] [leave] [invite] [hud] [chat] [lfg] [accept] [deny] [teleport]");
+            }
             if (args.length == 1) {
                 switch (args[0]) {
                     case "start":
